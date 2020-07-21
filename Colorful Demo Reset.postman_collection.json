@@ -1,0 +1,327 @@
+{
+	"info": {
+		"_postman_id": "57fa2e08-fe70-4ef8-ad01-a106424208e3",
+		"name": "Colorful Demo Reset",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get Master Environment Version",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "ff014726-b2cc-424c-8ff7-cd9f7abb01d9",
+						"exec": [
+							"let masterVersion = pm.response.json().sys.version;",
+							"pm.collectionVariables.set(\"masterVersion\", masterVersion);",
+							"console.log(\"master environment version: \" + masterVersion);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.contentful.com/spaces/{{space_id}}/environment_aliases/master?access_token={{cma_access_token}}",
+					"protocol": "https",
+					"host": [
+						"api",
+						"contentful",
+						"com"
+					],
+					"path": [
+						"spaces",
+						"{{space_id}}",
+						"environment_aliases",
+						"master"
+					],
+					"query": [
+						{
+							"key": "access_token",
+							"value": "{{cma_access_token}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Set Master Alias to Empty",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "17fa5123-e343-4488-96c9-1e73fbe45c35",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "274a2669-4251-478d-ac16-4116ac8f1370",
+						"exec": [
+							"let masterVersion = pm.response.json().sys.version;",
+							"pm.collectionVariables.set(\"masterVersion\", masterVersion);",
+							"console.log(\"master environment version: \" + masterVersion);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/vnd.contentful.management.v1+json"
+					},
+					{
+						"key": "X-Contentful-Version",
+						"value": "{{masterVersion}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"environment\": {\n    \"sys\": {\n      \"type\": \"Link\",\n      \"linkType\": \"Environment\",\n      \"id\": \"empty\"\n    }\n  }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api.contentful.com/spaces/{{space_id}}/environment_aliases/master?access_token={{cma_access_token}}",
+					"protocol": "https",
+					"host": [
+						"api",
+						"contentful",
+						"com"
+					],
+					"path": [
+						"spaces",
+						"{{space_id}}",
+						"environment_aliases",
+						"master"
+					],
+					"query": [
+						{
+							"key": "access_token",
+							"value": "{{cma_access_token}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Prod Environment",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/vnd.contentful.management.v1+json"
+					},
+					{
+						"key": "X-Contentful-Source-Environment",
+						"value": "template",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api.contentful.com/spaces/{{space_id}}/environments/prod?access_token={{cma_access_token}}",
+					"protocol": "https",
+					"host": [
+						"api",
+						"contentful",
+						"com"
+					],
+					"path": [
+						"spaces",
+						"{{space_id}}",
+						"environments",
+						"prod"
+					],
+					"query": [
+						{
+							"key": "access_token",
+							"value": "{{cma_access_token}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Recreate Prod from Template",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "d930a017-ce1c-4695-af23-a2d0c2e9be27",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/vnd.contentful.management.v1+json"
+					},
+					{
+						"key": "X-Contentful-Source-Environment",
+						"type": "text",
+						"value": "template"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"name\": \"prod\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api.contentful.com/spaces/{{space_id}}/environments/prod?access_token={{cma_access_token}}",
+					"protocol": "https",
+					"host": [
+						"api",
+						"contentful",
+						"com"
+					],
+					"path": [
+						"spaces",
+						"{{space_id}}",
+						"environments",
+						"prod"
+					],
+					"query": [
+						{
+							"key": "access_token",
+							"value": "{{cma_access_token}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Set Master Alias to prod",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "744e80a6-755f-4ae4-bbaf-6f42bcb488b0",
+						"exec": [
+							"//adding a delay to give the environment time to be ready (needed so that we can set the Alias)",
+							"setTimeout(function(){}, 3000);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/vnd.contentful.management.v1+json"
+					},
+					{
+						"key": "X-Contentful-Version",
+						"type": "text",
+						"value": "{{masterVersion}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"environment\": {\n    \"sys\": {\n      \"type\": \"Link\",\n      \"linkType\": \"Environment\",\n      \"id\": \"prod\"\n    }\n  }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api.contentful.com/spaces/{{space_id}}/environment_aliases/master?access_token={{cma_access_token}}",
+					"protocol": "https",
+					"host": [
+						"api",
+						"contentful",
+						"com"
+					],
+					"path": [
+						"spaces",
+						"{{space_id}}",
+						"environment_aliases",
+						"master"
+					],
+					"query": [
+						{
+							"key": "access_token",
+							"value": "{{cma_access_token}}"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "91596282-529e-41a3-bf62-2c0a38f0f36e",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "39a3936e-33df-443c-a148-13a44f46f779",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "19bee23b-2744-4744-ad51-c3ba07b74adc",
+			"key": "masterVersion",
+			"value": ""
+		}
+	],
+	"protocolProfileBehavior": {}
+}
